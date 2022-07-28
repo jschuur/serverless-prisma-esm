@@ -5,17 +5,16 @@ frameworkVersion: '3'
 
 plugins:
   - serverless-offline
+  - serverless-webpack
+  - serverless-webpack-prisma
+
+custom:
+  webpack:
+    includeModules: true
 
 provider:
   name: aws
   runtime: nodejs14.x
-
-package:
-  patterns:
-    - '!node_modules/.prisma/client/libquery_engine-*'
-    - 'node_modules/.prisma/client/libquery_engine-rhel-*'
-    - '!node_modules/prisma/libquery_engine-*'
-    - '!node_modules/@prisma/engines/**'
 
 functions:
   animals:
