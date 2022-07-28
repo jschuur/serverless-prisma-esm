@@ -1,0 +1,16 @@
+org: jschuur
+app: serverless-prisma-esm
+service: serverless-prisma-esm
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  animals:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
