@@ -13,8 +13,18 @@ module.exports = {
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
   resolve: { extensions: ['.js'] },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        // include: [path.resolve(__dirname, 'src'), /node_modules\/(pretty-ms)/],
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+    ],
+  },
   output: {
-    libraryTarget: 'commonjs',
+    libraryTarget: 'commonjs2',
     filename: '[name].js',
     path: path.resolve(__dirname, '.webpack'),
   },

@@ -1,10 +1,10 @@
-const { map } = require('lodash');
-const { PrismaClient } = require('@prisma/client');
-const prettyMilliseconds = require('pretty-ms');
+import { PrismaClient } from '@prisma/client';
+import { map } from 'lodash';
+import prettyMilliseconds from 'pretty-ms';
 
 const prisma = new PrismaClient();
 
-module.exports.animals = async (event) => {
+export const animals = async (event) => {
   const startTime = new Date();
   const frens = await prisma.animal.findMany();
 
