@@ -3,13 +3,23 @@ app: serverless-prisma-esm
 service: serverless-prisma-esm
 frameworkVersion: '3'
 
+plugins:
+  - serverless-offline
+
 provider:
   name: aws
   runtime: nodejs14.x
 
+package:
+  patterns:
+    - '!node_modules/.prisma/client/libquery_engine-*'
+    - 'node_modules/.prisma/client/libquery_engine-rhel-*'
+    - '!node_modules/prisma/libquery_engine-*'
+    - '!node_modules/@prisma/engines/**'
+
 functions:
   animals:
-    handler: handler.hello
+    handler: handler.animals
     events:
       - httpApi:
           path: /
