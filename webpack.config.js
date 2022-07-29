@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 
+const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except');
 const nodeExternals = require('webpack-node-externals');
 const slsw = require('serverless-webpack');
+
 const { isLocal } = slsw.lib.webpack;
 
 module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
-  externals: [nodeExternals()],
+  externals: [nodeExternals({ allowlist: ['pretty-ms', 'parse-ms'] })],
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
   resolve: { extensions: ['.js'] },
@@ -17,8 +18,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        // include: [path.resolve(__dirname, 'src'), /node_modules\/(pretty-ms)/],
-        exclude: /node_modules/,
+        exclude: babelLoaderExcludeNodeModulesExcept(['pretty-ms', 'parse-ms']),
         loader: 'babel-loader',
       },
     ],
