@@ -6,11 +6,17 @@ const slsw = require('serverless-webpack');
 
 const { isLocal } = slsw.lib.webpack;
 
+const pureESMModules = ['pretty-ms', 'parse-ms'];
+
 module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
-  externals: [nodeExternals({ allowlist: ['pretty-ms', 'parse-ms'] })],
+  externals: [
+    nodeExternals({
+      allowlist: pureESMModules,
+    }),
+  ],
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
   resolve: { extensions: ['.js'] },
@@ -18,8 +24,13 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: babelLoaderExcludeNodeModulesExcept(['pretty-ms', 'parse-ms']),
-        loader: 'babel-loader',
+        exclude: babelLoaderExcludeNodeModulesExcept(pureESMModules),
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
+        },
       },
     ],
   },
