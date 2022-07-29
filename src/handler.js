@@ -4,11 +4,11 @@ import prettyMilliseconds from 'pretty-ms';
 
 const prisma = new PrismaClient();
 
-export const animals = async (event) => {
+// eslint-disable-next-line import/prefer-default-export
+export const animals = async () => {
   const startTime = new Date();
   const frens = await prisma.animal.findMany();
 
-  console.log(map(frens, 'name').join(' & '));
   return {
     statusCode: 200,
     body: JSON.stringify(
