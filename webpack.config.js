@@ -3,28 +3,24 @@ const path = require('path');
 const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except');
 const nodeExternals = require('webpack-node-externals');
 const slsw = require('serverless-webpack');
+const getPureESMDependencies = require('./util/pureESMDependencies.js');
 
-const { isLocal } = slsw.lib.webpack;
-
-const pureESMModules = ['pretty-ms', 'parse-ms'];
+const pureESMDependencies = getPureESMDependencies();
 
 module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
-  externals: [
-    nodeExternals({
-      allowlist: pureESMModules,
-    }),
-  ],
-  mode: isLocal ? 'development' : 'production',
+  // Regexp makes sure externals handles formdata-polyfill/esm.min.js, but doesn't conflate date-fns with da†e-fns-tz
+  externals: [nodeExternals({ allowlist: pureESMDependencies.map((dep) => RegExp(`^${dep}(/.*)?$`)) })],
+  mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
   resolve: { extensions: ['.js'] },
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: babelLoaderExcludeNodeModulesExcept(pureESMModules),
+        exclude: babelLoaderExcludeNodeModulesExcept(pureESMDependencies),
         use: {
           loader: 'babel-loader',
           options: {

@@ -9,6 +9,9 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
+  rules: {
+    "import/extensions": ["error", "ignorePackages"],
+  }
   overrides: [
     {
       files: ['webpack.config.js'],
